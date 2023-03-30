@@ -89,23 +89,12 @@ for i, data in enumerate(test_dset):
     ref_pcs.append(data['pointcloud'].unsqueeze(0))
 ref_pcs = torch.cat(ref_pcs, dim=0)
 
-# Generate Point Clouds
-# gen_pcs = []
-# for i in tqdm(range(0, math.ceil(len(test_dset) / args.batch_size)), 'Generate'):
-#     with torch.no_grad():
-#         z = torch.randn([args.batch_size, ckpt['args'].latent_dim]).to(args.device)
-#         x = model.sample(z, args.sample_num_points, flexibility=ckpt['args'].flexibility)
-#         gen_pcs.append(x.detach().cpu())
-# gen_pcs = torch.cat(gen_pcs, dim=0)[:len(test_dset)]
-# if args.normalize is not None:
-#     gen_pcs = normalize_point_clouds(gen_pcs, mode=args.normalize, logger=logger)
 
 ####################################################################
+# Generate Point Clouds
 
 gen_pcs = []
-#for i in tqdm(range(0, math.ceil(len(test_dset) / args.batch_size)), 'Generate'):
 with torch.no_grad():
-    #z = torch.randn([args.batch_size, ckpt['args'].latent_dim]).to(args.device)
     z = torch.from_numpy(np.load(args.latentCode_path)).to(args.device)
     x = model.sample(z, args.sample_num_points, flexibility=ckpt['args'].flexibility)
     gen_pcs.append(x.detach().cpu())
@@ -118,13 +107,3 @@ if args.normalize is not None:
 # Save
 logger.info('Saving point clouds...')
 np.save(os.path.join(save_dir, 'out.npy'), gen_pcs.numpy())
-
-## Compute metrics
-# with torch.no_grad():
-#     results = compute_all_metrics(gen_pcs.to(args.device), ref_pcs.to(args.device), args.batch_size)
-#     results = {k:v.item() for k, v in results.items()}
-#     jsd = jsd_between_point_cloud_sets(gen_pcs.cpu().numpy(), ref_pcs.cpu().numpy())
-#     results['jsd'] = jsd
-
-# for k, v in results.items():
-#     logger.info('%s: %.12f' % (k, v))
