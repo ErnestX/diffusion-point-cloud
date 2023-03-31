@@ -19,6 +19,8 @@ assert s.shape == (numOfSamples_line, ep1.shape[0])
 print(s.shape)
 print(s)
 
+
+
 ### Grid sampling given four corners
 def gridSampling(corner1, corner2, cornerA, cornerB, numOfSamples1, numOfSamples2):
     dim = corner1.shape[0]
@@ -38,3 +40,16 @@ s_grid = gridSampling(c1, c2, cA, cB, numOfSamples_line, numOfSamples_line2)
 print(s_grid.shape)
 assert s_grid.shape == (numOfSamples_line2, numOfSamples_line, c1.shape[0])
 print(s_grid)
+
+
+### Distance between points
+def distanceBetweenPoints(point1, point2):
+    return np.linalg.norm(point1-point2)
+
+p1 = np.array([0,0])
+p2 = np.array([3,4])
+assert distanceBetweenPoints(p1, p2) == 5
+
+p3 = np.array([-2, -1, 0, 1, 2, 3])
+p4 = np.array([0, -1, 0, 1, 2, 3])
+assert distanceBetweenPoints(p3, p4) == 2
