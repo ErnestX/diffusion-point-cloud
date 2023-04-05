@@ -1,6 +1,7 @@
 from flask import Flask
-from werkzeug.utils import secure_filename
-from markupsafe import escape
+# from werkzeug.utils import secure_filename
+from flask import request
+# from markupsafe import escape
 import numpy as np
 
 
@@ -27,18 +28,29 @@ def hello_world():
 #         file.save(f"/var/www/uploads/{secure_filename(file.filename)}")
 
 
-# ############ Get JSON
-# @app.route('/api/add_message/<uuid>', methods=['GET', 'POST'], mimetype='application/json')
-# def add_message(uuid):
-#     # set force to True to read it as JSON (ignore the content type set by client)
-#     content = request.get_json(force=True) 
-#     print(content)
-#     #return uuid
+############ Get JSON
+@app.route('/generateFromLatentCode/', methods=['POST'])
+def generateFromLatentCode():
+    # set force to True to read it as JSON (ignore the content type set by client)
+    try:
+        content = request.get_json(force=True, silent=False, cache=True) 
+    except:
+        return "cannot parse JSON"
+    
+    requestId = content['id']
+    latentCode = content['latentCode']
+
+    return {
+        "id": requestId,
+        "latentCode": latentCode,
+        # "pointCloud": generatedPointCloud
+    }
+    
 
 
 ############ Return JSON
-@app.route("/generateFromCode")
-def me_api():
+@app.route("/testGeneration")
+def sendTestPointCloud():
     testLatentCode = np.load(latentCode_path)
     testPointCloud = np.load(pointCloud_path)
     return {
