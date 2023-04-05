@@ -40,7 +40,7 @@ def generateFromLatentCode():
     requestId = content['id']
     latentCode = content['latentCode']
 
-    return {
+    return { 
         "id": requestId,
         "latentCode": latentCode,
         # "pointCloud": generatedPointCloud
