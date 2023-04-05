@@ -7,7 +7,7 @@ import numpy as np
 
 ##### This is exactly how the original code generated its random samples
 
-numOfCodeToGen = 10
+numOfCodeToGen = 3
 dimOfLatentCode = 256
 device = 'cuda'
 save_dir = './latentCode'
