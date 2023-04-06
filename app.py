@@ -35,15 +35,15 @@ def hello_world():
 
 
 ############ Get JSON
-@app.route('/generateFromLatentCode/', methods=['POST'])
-def generateFromLatentCode():
+@app.route('/generateFromLatentCode/<requestId>', methods=['POST'])
+def generateFromLatentCode(requestId):
     # set force to True to read it as JSON (ignore the content type set by client)
     try:
         content = request.get_json(force=True, silent=False, cache=True) 
     except:
         return "cannot parse JSON"
     
-    requestId = content['id']
+    # requestId = content['id']
     latentCode = content['latentCode']
 
     return { 
