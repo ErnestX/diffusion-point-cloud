@@ -1,46 +1,25 @@
 
-function getExamplePointClouds() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    console.log(this.readyState);
-    console.log(this.status)
-    if (this.readyState == 4 && this.status == 200) {
-      var pointClouds = JSON.parse(this.responseText);
-      document.getElementById("jsonResult").textContent = JSON.stringify(pointClouds, undefined, 4);
-  }
-};
-  xhttp.open("GET", "http://127.0.0.1:5000/generateExamplePointClouds", true);
-  xhttp.send();
+const websocket  = new WebSocket("ws://localhost:8001/");    
+websocket.addEventListener("message", ({ data }) => {
+    console.log("received a message");
+    let response = JSON.parse(data);
+    let rid = response.requestId;
+    document.getElementById("IdFromResponse").textContent = rid
+    let latentCodes = response.latentCodes;
+    document.getElementById("jsonLatentCodeFromResponse").textContent = JSON.stringify(latentCodes, undefined, 4);
+    let pointClouds = response.pointClouds
+    document.getElementById("jsonPointCloudsFromResponse").textContent = JSON.stringify(pointClouds, undefined, 4);
+});
+console.log("done Setup");
+
+$(document).ready(function(){
+    console.log("document ready");
+});
+
+function generatePointCloudsWithRandomCodes(){
+    var jsonObj = new Object();
+    jsonObj.latentCode = [1,2,3];
+    websocket.send(JSON.stringify(jsonObj));
 }
 
-function generatePointCloudsWithRandomCodes() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    console.log(this.readyState);
-    console.log(this.status)
-    console.log(this.responseText)
-    if (this.readyState == 4 && this.status == 200) {
-      var pointClouds = JSON.parse(this.responseText);
-      document.getElementById("jsonResult").textContent = JSON.stringify(pointClouds, undefined, 4);
-    }
-  };
-
-  xhttp.open("POST", "http://127.0.0.1:5000/generateFromLatentCode/yourRequestId", true);
-  xhttp.setRequestHeader('Content-type', 'application/json')
-
-  var jsonObj = new Object();
-  jsonObj.latentCode = [1,2,3];
-
-  xhttp.send(JSON.stringify(jsonObj));
-}
-
-// function generateRandomLatentCode() {
-//   const numToGenerate = 3;
-//   const dimension = 236;
-
-//   for (let i = 0; i < numToGenerate; i++) {
-//     for (let j = 0; j < dimension; j++) {
-      
-//     }
-//   }
-// }
+    

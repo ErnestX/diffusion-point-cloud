@@ -1,74 +1,29 @@
-from flask import Flask
-from flask_cors import CORS
-# from werkzeug.utils import secure_filename
-from flask import request
-from flask import Response
-from flask import json
-from flask.json import jsonify
-# from markupsafe import escape
+import asyncio
+import websockets
+import json
 import numpy as np
 
+testLatentCode_path ="./latentCode/latentCode.npy"
+testPointCloud_path = "./results/GEN_Ours_chair_1680652639/out.npy"
 
-app = Flask(__name__)
-CORS(app) # this enables cross-origin resource sharing
-
-latentCode_path = './latentCode/latentCode.npy'
-pointCloud_path = './results/GEN_Ours_chair_1680652639/out.npy'
-
-########### Load the Model
-
-
-
-
-
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+async def handler(websocket):
+    async for message in websocket:
+        testLatentCode = np.load(testLatentCode_path)
+        testPointCloud = np.load(testPointCloud_path)
+        examplePC = json.dumps({"requestId": "exampleID", 
+                                "latentCodes": testLatentCode.tolist(), 
+                                "pointClouds": testPointCloud.tolist()})
+        await websocket.send(examplePC)
 
 
-# ############ file upload
-# @app.route('/upload', methods=['GET', 'POST'])
-# def upload_file():
-#     if request.method == 'POST':
-#         file = request.files['the_file']
-#         file.save(f"/var/www/uploads/{secure_filename(file.filename)}")
+# entry point
+async def main():
+    ############## Load Model
 
 
-############ Get JSON
-@app.route('/generateFromLatentCode/<requestId>', methods=['POST'])
-def generateFromLatentCode(requestId):
-    # set force to True to read it as JSON (ignore the content type set by client)
-    try:
-        content = request.get_json(force=True, silent=False, cache=True) 
-    except:
-        return "cannot parse JSON"
-    
-    # requestId = content['id']
-    latentCode = content['latentCode']
-
-    return { 
-        "id": requestId,
-        "latentCode": latentCode,
-        # "pointCloud": generatedPointCloud
-    }
-    
+    async with websockets.serve(handler, "", 8001):
+        await asyncio.Future()  # run forever
 
 
-############ Return JSON
-@app.route("/generateExamplePointClouds", methods=['GET'])
-def sendTestPointCloud():
-    testLatentCode = np.load(latentCode_path)
-    testPointCloud = np.load(pointCloud_path)
-    examplePC = json.dumps({'id': 'exampleID', 
-                            'latentCode': testLatentCode.tolist(), 
-                            'pointCloud': testPointCloud.tolist()})
-
-    r = Response(examplePC, mimetype='application/json')
-    assert r.content_type == 'application/json'
-    return r
-
-# @app.route("/users")
-# def users_api():
-#     users = get_all_users()
-#     return [user.to_json() for user in users]
-
+if __name__ == "__main__":
+    asyncio.run(main())
