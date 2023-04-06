@@ -81,18 +81,18 @@ async def handler(websocket):
         if normalize is not None:
             gen_pcs = normalize_point_clouds(gen_pcs, mode=normalize, logger=logger)
 
-        # Save generate pointclouds for debugging
-        logger.info('Saving point clouds...')
-        np.save(os.path.join(log_dir, 'out.npy'), gen_pcs.numpy())
+        # # Uncomment to save generated pointclouds for debugging
+        # logger.info('Saving point clouds...')
+        # np.save(os.path.join(log_dir, 'out.npy'), gen_pcs.numpy())
 
 
         ####################################################### Respond
-        testLatentCode = np.load(testLatentCode_path)
-        testPointCloud = np.load(testPointCloud_path)
-        examplePC = json.dumps({"requestId": "exampleID", 
-                                "latentCodes": testLatentCode.tolist(), 
-                                "pointClouds": testPointCloud.tolist()})
-        await websocket.send(examplePC)
+        # testLatentCode = np.load(testLatentCode_path)
+        # testPointCloud = np.load(testPointCloud_path)
+        response = json.dumps({"requestId": requestId, 
+                               "latentCodes": latentCodes, 
+                               "pointClouds": gen_pcs.tolist()})
+        await websocket.send(response)
 
 
 # entry point
