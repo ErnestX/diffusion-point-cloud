@@ -8,6 +8,7 @@ testPointCloud_path = "./testResult/out.npy"
 
 async def handler(websocket):
     async for message in websocket:
+        print(message)
         testLatentCode = np.load(testLatentCode_path)
         testPointCloud = np.load(testPointCloud_path)
         examplePC = json.dumps({"requestId": "exampleID", 

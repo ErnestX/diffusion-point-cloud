@@ -18,8 +18,34 @@ $(document).ready(function(){
 
 function generatePointCloudsWithRandomCodes(){
     var jsonObj = new Object();
-    jsonObj.latentCode = [1,2,3];
+    let newId = Math.ceil(Math.random() * 1000).toString();
+    jsonObj.requestId = newId;
+    jsonObj.latentCode = generateRandomLatentCodes();
     websocket.send(JSON.stringify(jsonObj));
 }
 
-    
+function generateRandomLatentCodes() {
+    const numToGenerate = 3;
+    const dimension = 236;
+
+    var newLatentCodes = []
+    for (let i = 0; i < numToGenerate; i++) {
+        var randomLatentCode = []
+        for (let j = 0; j < dimension; j++) {
+            randomLatentCode.push(gaussianRandom());
+        }
+        newLatentCodes.push(randomLatentCode);
+    }
+
+    return newLatentCodes;
+}
+
+// Standard Normal variate using Box-Muller transform.
+// source: https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve
+function gaussianRandom(mean=0, stdev=1) {
+    let u = 1 - Math.random(); // Converting [0,1) to (0,1]
+    let v = Math.random();
+    let z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    // Transform to the desired mean and standard deviation:
+    return z * stdev + mean;
+}

@@ -33,14 +33,3 @@ function generatePointCloudsWithRandomCodes() {
 
   xhttp.send(JSON.stringify(jsonObj));
 }
-
-// function generateRandomLatentCode() {
-//   const numToGenerate = 3;
-//   const dimension = 236;
-
-//   for (let i = 0; i < numToGenerate; i++) {
-//     for (let j = 0; j < dimension; j++) {
-      
-//     }
-//   }
-// }
