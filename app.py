@@ -1,6 +1,9 @@
 from flask import Flask
 # from werkzeug.utils import secure_filename
 from flask import request
+from flask import Response
+from flask import json
+from flask.json import jsonify
 # from markupsafe import escape
 import numpy as np
 
@@ -49,15 +52,20 @@ def generateFromLatentCode():
 
 
 ############ Return JSON
-@app.route("/testGeneration")
+@app.route("/generateExamplePointClouds")
 def sendTestPointCloud():
     testLatentCode = np.load(latentCode_path)
     testPointCloud = np.load(pointCloud_path)
-    return {
-        "id": "requestID",
-        "latentCode": testLatentCode.tolist(),
-        "pointCloud": testPointCloud.tolist()
-    }
+    # examplePC = jsonify(id = 'exampleID', 
+    #                    latentCode = testLatentCode.tolist(), 
+    #                    pointCloud = testPointCloud.tolist())
+    examplePC = json.dumps({'id': 'exampleID', 
+                            'latentCode': testLatentCode.tolist(), 
+                            'pointCloud': testPointCloud.tolist()})
+                            
+    r = Response(examplePC, mimetype='application/json')
+    assert r.content_type == 'application/json'
+    return r
 
 # @app.route("/users")
 # def users_api():
