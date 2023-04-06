@@ -3,8 +3,8 @@ import websockets
 import json
 import numpy as np
 
-testLatentCode_path ="./latentCode/latentCode.npy"
-testPointCloud_path = "./results/GEN_Ours_chair_1680652639/out.npy"
+testLatentCode_path ="./testingWebApp/data/testLatentCode.npy"
+testPointCloud_path = "./testResult/out.npy"
 
 async def handler(websocket):
     async for message in websocket:
