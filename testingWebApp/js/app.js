@@ -20,13 +20,13 @@ function generatePointCloudsWithRandomCodes(){
     var jsonObj = new Object();
     let newId = Math.ceil(Math.random() * 1000).toString();
     jsonObj.requestId = newId;
-    jsonObj.latentCode = generateRandomLatentCodes();
+    jsonObj.latentCodes = generateRandomLatentCodes();
     websocket.send(JSON.stringify(jsonObj));
 }
 
 function generateRandomLatentCodes() {
     const numToGenerate = 3;
-    const dimension = 236;
+    const dimension = 256;
 
     var newLatentCodes = []
     for (let i = 0; i < numToGenerate; i++) {
