@@ -6,8 +6,9 @@ Install pytorch here (I used CUDA 11.7) https://pytorch.org/get-started/locally/
 Finally follow the table (skip pytorch). Install specified version if possible
 
 Make sure to test the model before using my code:
+```bash
 python test_gen.py --ckpt ./pretrained/GEN_chair.pt --categories chair
-
+```
 
 ### Utility Scripts (For testing. Not required to run): 
 To create a random batch of latent code as npy file: 
