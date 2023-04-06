@@ -55,13 +55,10 @@ def generateFromLatentCode():
 
 
 ############ Return JSON
-@app.route("/generateExamplePointClouds")
+@app.route("/generateExamplePointClouds", methods=['GET'])
 def sendTestPointCloud():
     testLatentCode = np.load(latentCode_path)
     testPointCloud = np.load(pointCloud_path)
-    # examplePC = jsonify(id = 'exampleID', 
-    #                    latentCode = testLatentCode.tolist(), 
-    #                    pointCloud = testPointCloud.tolist())
     examplePC = json.dumps({'id': 'exampleID', 
                             'latentCode': testLatentCode.tolist(), 
                             'pointCloud': testPointCloud.tolist()})
