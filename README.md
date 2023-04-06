@@ -1,3 +1,50 @@
+### Installing the original codebase: 
+For installation, don't use the env.yml file. Use Option2. 
+
+First create conda environment with default python and activate. 
+Install pytorch here (I used CUDA 11.7) https://pytorch.org/get-started/locally/
+Finally follow the table (skip pytorch). Install specified version if possible
+
+Make sure to test the model before using my code:
+python test_gen.py --ckpt ./pretrained/GEN_chair.pt --categories chair
+
+
+### Utility Scripts (For testing. Not required to run): 
+To create a random batch of latent code as npy file: 
+python latent_random.py
+
+To create some specific latent code as npy file for testing (edit the python script yourself): 
+python latent_specific.py
+
+Finally, to generate chair from the created latent code as npy file: 
+python gen_from_latent.py --ckpt ./pretrained/GEN_chair.pt --categories chair
+
+
+### Additional Installations for my code: 
+```bash
+# Install WebSockets:  (for me the version is 10.4)
+conda install websockets
+```
+
+### Usage: 
+#### 1. Start the python server
+At project folder, activate the conda environment
+```bash
+python app.py
+```
+Wait a few seconds for it to load the model architecture
+
+#### 2. Use the testing web client
+Goto testingWebApp folder and open the main.html file. 
+Now you can click the button and send a batch of random latent code to the sever then receive a batch of generated point cloud. 
+
+### Known Issues: 
+```bash
+INTEL MKL ERROR: The specified module could not be found. mkl_intel_thread.dll.
+```
+Solution: install numpy again (I used 1.20.2)
+
+
 # Diffusion Probabilistic Models for 3D Point Cloud Generation
 <img src="teaser.png" alt="teaser" width="50%" />
 
