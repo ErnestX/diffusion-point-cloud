@@ -11,15 +11,16 @@ python test_gen.py --ckpt ./pretrained/GEN_chair.pt --categories chair
 ```
 
 ## Utility Scripts (For testing. Not required to run): 
-To create a random batch of latent code as npy file: 
+```bash
+# To create a random batch of latent code as npy file: 
 python latent_random.py
 
-To create some specific latent code as npy file for testing (edit the python script yourself): 
+# To create some specific latent code as npy file for testing (edit the python script yourself): 
 python latent_specific.py
 
-Finally, to generate chair from the created latent code as npy file: 
+# Finally, to generate chair from the created latent code as npy file: 
 python gen_from_latent.py --ckpt ./pretrained/GEN_chair.pt --categories chair
-
+```
 
 ## Additional Installations for my code: 
 ```bash
