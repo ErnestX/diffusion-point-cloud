@@ -14,12 +14,15 @@ python test_gen.py --ckpt ./pretrained/GEN_chair.pt --categories chair
 ```bash
 # To create a random batch of latent code as npy file: 
 python latent_random.py
+# output saved in /latentCode
 
-# To create some specific latent code as npy file for testing (edit the python script yourself): 
+# To create some specific latent code as npy file for testing. Edit the python script to specify: 
 python latent_specific.py
+# output saved in /latentCode
 
 # Finally, to generate chair from the created latent code as npy file: 
 python gen_from_latent.py --ckpt ./pretrained/GEN_chair.pt --categories chair
+# output saved in /results
 ```
 
 ## Additional Installations for my code: 
@@ -39,6 +42,7 @@ Wait a few seconds for it to load the model architecture
 #### 2. Use the testing web client
 Goto testingWebApp folder and open the main.html file. 
 Now you can click the button and send a batch of random latent code to the sever then receive a batch of generated point cloud. 
+
 
 ## Known Issues: 
 ```bash
