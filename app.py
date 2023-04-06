@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 # from werkzeug.utils import secure_filename
 from flask import request
 from flask import Response
@@ -9,6 +10,8 @@ import numpy as np
 
 
 app = Flask(__name__)
+CORS(app) # this enables cross-origin resource sharing
+
 latentCode_path = './latentCode/latentCode.npy'
 pointCloud_path = './results/GEN_Ours_chair_1680652639/out.npy'
 
@@ -62,7 +65,7 @@ def sendTestPointCloud():
     examplePC = json.dumps({'id': 'exampleID', 
                             'latentCode': testLatentCode.tolist(), 
                             'pointCloud': testPointCloud.tolist()})
-                            
+
     r = Response(examplePC, mimetype='application/json')
     assert r.content_type == 'application/json'
     return r
