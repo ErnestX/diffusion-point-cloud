@@ -63,25 +63,20 @@ async def handler(websocket):
         ###################################################### Parse Request
         request = json.loads(message)
         requestId = request["requestId"]
-        #print(requestId)
         latentCodes = request["latentCodes"]
-        #print(latentCodes)
 
         ####################################################### Generate
         gen_pcs = []
         with torch.no_grad():
-            print("################")
-            print(device)
             z = torch.from_numpy(np.asarray(latentCodes, dtype=np.float32)).to(device)
             assert z.shape[1] == dimOfLatentCode
-            # z = torch.from_numpy(np.load(args.latentCode_path)).to(args.device)
             x = model.sample(z, sample_num_points, flexibility=ckpt['args'].flexibility)
             gen_pcs.append(x.detach().cpu())
         gen_pcs = torch.cat(gen_pcs, dim=0)[:len(test_dset)]
         if normalize is not None:
             gen_pcs = normalize_point_clouds(gen_pcs, mode=normalize, logger=logger)
 
-        # # Uncomment to save generated pointclouds for debugging
+        # # Uncomment to save generated pointclouds for debugging (SLOWS DOWN THE SERVER) 
         # logger.info('Saving point clouds...')
         # np.save(os.path.join(log_dir, 'out.npy'), gen_pcs.numpy())
 
@@ -121,16 +116,10 @@ async def main():
 
     ################################# Setup and Load Model
     # Logging
-    # save_dir = os.path.join(args.log_dir, 'GEN_Ours_%s_%d' % ('_'.join(args.categories), int(time.time())) )
-    # if not os.path.exists(save_dir):
-    #     os.makedirs(save_dir)
     logger = get_logger('test', log_dir)
-    # for k, v in vars(args).items():
-    #     logger.info('[ARGS::%s] %s' % (k, repr(v)))
 
     # Checkpoint
     ckpt = torch.load(ckpt)
-    # seed_all(args.seed)
 
     # Datasets and loaders
     logger.info('Loading datasets...')
@@ -149,8 +138,6 @@ async def main():
     elif ckpt['args'].model == 'flow':
         model = FlowVAE(ckpt['args']).to(device)
     logger.info(repr(model))
-    # if ckpt['args'].spectral_norm:
-    #     add_spectral_norm(model, logger=logger)
     model.load_state_dict(ckpt['state_dict'])
 
     # Reference Point Clouds
