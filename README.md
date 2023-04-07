@@ -40,8 +40,8 @@ python app.py
 Wait a few seconds for it to load the model architecture
 
 #### 2. Use the testing web client
-Goto testingWebApp folder and open the main.html file. 
-Now you can click the button and send a batch of random latent code to the sever then receive a batch of generated point cloud. 
+Go to testingWebApp folder and open the main.html file. 
+Now you can click the button and send a batch of random latent code to the sever then receive a batch of generated point cloud. Click again to reroll. The random generation is done on the client side, and the sever generates the point clouds accordingly. 
 
 
 ## Known Issues: 
